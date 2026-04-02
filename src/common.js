@@ -6,6 +6,14 @@ Object.defineProperty(Array.prototype, 'chunk', {
     }
 });
 
+Object.defineProperty(Array.prototype, 'toString', {
+    value: function() {
+        let res = '';
+        for (let i = 0; i < this.length; i++) res += String.fromCharCode(this[i])
+        return res;
+    }
+});
+
 const log = s => document.getElementById('root').innerText = s;
 
 let fulltext = '';
@@ -17,7 +25,7 @@ const slice = (prev) => {
 }
 
 const cmpArr = (a, b) => a.length == b.length && a.every((v, i) => v === b[i]);
-const bytesToString = (bytes) => String.fromCharCode(...bytes);
+const stringToCharCodes = s => s.split('').map(char => char.charCodeAt(0))
 const toHex = (bytes) => bytes.map(b => b.toString(16).padStart(2, '0')).join('');
 
 const decodeASCII85 = (source) => {
