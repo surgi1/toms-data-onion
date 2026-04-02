@@ -14,9 +14,7 @@ let res1 = slice(input);
 
 let data2 = slice(res1);
 
-const part2Decode = data => data
-        .split('')
-        .map(char => char.charCodeAt(0))
+const part2Decode = data => data.split('').map(char => char.charCodeAt(0))
         .map(n => (n ^ 0b01010101).toString(2).padStart(8, '0'))
         .map(s => rotateRight(s))
         .map(s => parseInt(s, 2))
@@ -27,23 +25,20 @@ const part2Decode = data => data
 let res2 = part2Decode(data2);
 let data3 = slice(res2);
 
-const part3Decode = data => {
-    let bits = [];
-    data.split('')
-        .map(char => char.charCodeAt(0))
-        .forEach(n => {
+const part3Decode = data => data.split('').map(char => char.charCodeAt(0))
+        .map(n => {
             let tmp = n.toString(2).padStart(8, '0').split('').map(Number);
             let parityBit = tmp.pop();
-            let data1s = tmp.filter(v => v === 1).length;
-            if (data1s % 2 === parityBit) bits.push(...tmp);
+            return {correct: tmp.filter(v => v === 1).length % 2 === parityBit, data: tmp}
         })
-    return bits.chunk(8).map(chunk => String.fromCharCode(Number('0b' + chunk.join('')) )).join('')
-}
+        .filter(o => o.correct).map(o => o.data).flat().chunk(8)
+        .map(chunk => String.fromCharCode(Number('0b' + chunk.join('')) ))
+        .join('')
 
 let res3 = part3Decode(data3);
 let data4 = slice(res3);
 
-// solved by semi-manual XORing from ==[ Layer 4/6:                 ]============================ base
+// solved by semi-manual XORing from `==[ Layer 4/6:                 ]============================` base
 const part4Decode = _data => {
     let data = _data.split('').map(v => v.charCodeAt(0));
     let key = '==[ Layer 4/6: Network Traffic ]'.split('').map(v => v.charCodeAt(0)).map((n, i) => data[i] ^ n);
